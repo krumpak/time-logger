@@ -65,7 +65,7 @@ function EchoTime(){
 	var String ='<style>';
 	String +=' .sticky {height:100%; position:fixed; width:120px; left:0; top:0; z-index:100; border-top:0;}';
 	String +=' button, span { color:black; font-size:15px; background-color:white; font-family:arial,sans-serif; position:absolute; width:90px; margin-left:20px; }';
-	String +=' #table-data { margin-left:120px; }';
+	String +=' #table-data { margin-left:120px; width: 300px; }';
 	String +=' </style>';
 
 	String +='<div class="sticky">';
