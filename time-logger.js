@@ -1,17 +1,45 @@
 /*	
 *	Time Logger
 *	Author: Gorazd Krumpak
-*	Version: 1.0
+*	Version: 2.0
+*
+*	Logging Time of activities, stored in LocalStorage
+*
 *	paste script before ent tag body:	<script src='http://timelogger.primaprodukcija.si/time-logger.js></script>
 *	use minified version:	<script src='http://timelogger.primaprodukcija.si/tl.min.js></script>
 *	Click right-bottom button 'Open Log' to access stored data.
+*	Logging on tag BODY load, click, keypress, focus, scroll
+*	Log interval is set to 1 minute
+*	You can add comments to log.
+*	Keyboard shortcuts: 
+*	- ENTER: save entry
+*	- TAB: save entry & go to next
+*	- SHIFT + TAB: save entry & go to previous
+*	- ESC: cancel changes
+*	Copy raw data.
 */
 
+var CommentString = " ## ";
+
+function $(ID){
+	return document.getElementById(ID);
+}
+function GetURL(){
+	var CurrentURL=window.location.href;
+	var position = CurrentURL.indexOf("#");
+	if( position > 1 ){
+		CleanCurrentURL = CurrentURL.substring(0, position);
+	} else {
+		CleanCurrentURL = CurrentURL;
+	}
+	return CurrentURL;
+}
 function WriteLocalStorage(Data){
 	localStorage.setItem("TimeLog", JSON.stringify(Data));
 }
 function ReadLocalStorage(){
 	var Data=localStorage.getItem("TimeLog");
+	//console.log(Data.length);
 	return JSON.parse(Data);
 }
 function LeadingZero(Number){
@@ -53,26 +81,27 @@ function DeleteEntry(ID){
 
 	WriteLocalStorage(Storage);
 	
-	var CurrentURL=window.location.href;
+	var CurrentURL=GetURL();
 	Reload(CurrentURL);
 }
 function EchoTime(){
-	var body=document.getElementsByTagName('body')[0];
-	var CurrentURL=window.location.href;
+	var body=document.body;
+	var CurrentURL=GetURL();
 	var RedirectURL=CurrentURL.replace(/\?openlog/gi, "");
 	var Storage=ReadLocalStorage();
 
 	var String ='<style>';
 	String +=' .sticky {height:100%; position:fixed; width:120px; left:0; top:0; z-index:100; border-top:0;}';
 	String +=' button, span { color:black; font-size:15px; background-color:white; font-family:arial,sans-serif; position:absolute; width:90px; margin-left:20px; }';
-	String +=' #table-data { margin-left:120px; width: 300px; }';
+	String +=' #table-data { margin-left:120px; width: 620px; }';
+	String +=' input { width:320px;height:20px;font-size: 12px;margin:0;padding:0;border:0;background-color:black;color:yellow; }';
 	String +=' </style>';
 
 	String +='<div class="sticky">';
-	String +='<span class="btn btn-default" role="button" style="bottom:20px;" onclick="window.scrollTo(0, 0);;">To Top</span>';
-	String +='<button class="btn btn-default" type="submit" style="top:120px;" onClick=DopyData();>Copy data</button>';
+	String +='<span class="btn btn-default" role="button" style="bottom:20px;" onclick="window.scrollTo(0, 0);">To Top</span>';
 	String +='<button class="btn btn-default" type="submit" style="top:120px;" onClick=Reload('+"'"+RedirectURL+"'"+');>Close</button>';
-	String +='<button class="btn btn-default" type="submit" style="top:220px;" onClick='+"'ClearTime();'"+'>Clear All</button>';
+	String +='<button class="btn btn-default" type="submit" style="top:170px;" onClick=CopyRawData();>Raw data</button>';
+	String +='<button class="btn btn-default" type="submit" style="top:270px;" onClick='+"'ClearTime();'"+'>Clear All</button>';
 	String +='<span class="btn btn-default" role="button" style="top:20px;" onclick="window.scrollTo(0, document.body.scrollHeight);">To Bottom</span>';
 	String +='</div>';
 
@@ -80,9 +109,21 @@ function EchoTime(){
 		
 	if( Storage != null ){
 		for(var i=0; i < Storage.length; i++){
+			var Item = Storage[i];
+			var ItemComment =  Item.indexOf(CommentString);
+			if( ItemComment > 0 ){
+				var Separation = Item.split(CommentString);
+				var TimeData = Separation[0];
+				var CommentData = "<td title='Edit Comment' style='padding: 0 2px;'><div id='static"+i+"' onclick='AddComment("+i+");'>"+Separation[1]+" +</div><div id='change"+i+"' style='display:none;white-space:nowrap;'><input class='inline' title='Add Comment' type='text' id='input"+i+"' value='"+Separation[1]+"' maxlength='50' onkeypress='EnterComment(event, "+i+");'>&nbsp;<b class='inline' title='Save' onclick='SaveComment("+i+");'>&nbsp;&radic;&nbsp;</b>&nbsp;<b class='inline' title='Cancel' onclick='CancelComment("+i+");'>&nbsp;&#215;&nbsp;</b></div></td>";
+			} else {
+				var TimeData = Item;
+				var CommentData = "<td title='Add Comment' style='padding: 0 2px;min-width:330px;'><div id='static"+i+"' onclick='AddComment("+i+");'><div style='text-align:center'>+</div></div><div id='change"+i+"' style='display:none;white-space:nowrap;'><input class='inline' title='Add Comment' type='text' id='input"+i+"' value='' maxlength='50' onkeypress='EnterComment(event, "+i+");'>&nbsp;<b class='inline' title='Save' onclick='SaveComment("+i+");'>&nbsp;&radic;&nbsp;</b>&nbsp;<b class='inline' title='Cancel' onclick='CancelComment("+i+");'>&nbsp;&#215;&nbsp;</b></div></td>";
+			}
+
 			TableData += "<tr>";
 			TableData += "<td style='padding: 0 2px;'>"+(i+1)+".</td>";
-			TableData += "<td title='Select All => copy&paste to Excel!' style='padding: 0 2px;'>"+Storage[i]+"</td>";
+			TableData += "<td title='Select All => copy&paste to Excel!' style='padding: 0 2px;'>"+TimeData+"</td>";
+			TableData += CommentData;
 			TableData += "<td style='padding: 0 2px;' title='Delete current entry!'> <div style='padding: 0 10px;' onclick='DeleteEntry("+i+");'>&#10006;</div> </td>";
 			TableData += "</tr>";
 		}
@@ -91,17 +132,97 @@ function EchoTime(){
 
 	body.innerHTML=String+TableData;
 }
+function AddComment(ID){
+    $("static"+ID).style.display = 'none';
+    $("change"+ID).style.display = 'block';
+    $("input"+ID).focus();
+    $("input"+ID).select();
+}
+function SaveComment(ID){
+    var value = $("input"+ID).value;
+    value = value.trim();
+
+	var Storage=ReadLocalStorage();
+
+	var Item = Storage[ID];
+	var ItemComment =  Item.indexOf(CommentString);
+
+	if ( ItemComment > 0 && value != '' ) {
+		var Separation = Item.split(CommentString);
+		var Injection = Separation[0]+CommentString+value;
+		Storage[ID] = Injection;
+		WriteLocalStorage(Storage);
+		$("static"+ID).innerHTML = value+" +";
+	} else if ( ItemComment > 0 && value == '' ) {
+		var Separation = Item.split(CommentString);
+		var Injection = Separation[0];
+		Storage[ID] = Injection;
+		WriteLocalStorage(Storage);
+		$("static"+ID).innerHTML = "<div style='text-align:center'>+</div>";
+	} else if ( ItemComment < 0 && value != '' ) {
+		var Injection = Item+CommentString+value;
+		Storage[ID] = Injection;
+		WriteLocalStorage(Storage);
+		$("static"+ID).innerHTML = value+" +";
+	} else {
+		$("static"+ID).innerHTML = "<div style='text-align:center'>+</div>";
+		//console.log("No commenting");	
+	}
+
+    $("static"+ID).style.display = 'block';
+    $("change"+ID).style.display = 'none';
+
+}
+function CancelComment(ID){
+    $("static"+ID).style.display = 'block';
+    $("change"+ID).style.display = 'none';
+}
+function EnterComment(event, ID){
+	var key=event.keyCode || event.which;
+
+	if(key==13){ SaveComment(ID); }
+	if(key==27){ CancelComment(ID); }
+	if(event.shiftKey && event.keyCode == 9){ 
+		SaveComment(ID);
+		AddComment(ID-1);
+	}
+	else if(key==9){ 
+		SaveComment(ID);
+		AddComment(ID+1);
+	}
+}
+function CopyRawData(){
+	var body = document.body;
+	var Storage=ReadLocalStorage();
+		console.clear();
+	var TableData ='<div style="width:50%;text-align:center;margin: 5px auto;"><div onclick="EchoTime();">Close</div><br><textarea onClick="this.select();" style="width:100%;height:500px;background-color:white;overflow:auto;border:1px solid #ccc;">';
+	if( Storage != null ){
+		for(var i=0; i < Storage.length; i++){
+			var Item = Storage[i];
+			var ItemComment =  Item.indexOf(CommentString);
+			if( ItemComment > 0 ){
+				var Separation = Item.split(CommentString);
+				TableData += Separation[0]+"\t"+Separation[1]+"\n";
+			} else {
+				TableData += Item+"\n";
+			}
+		}
+	}
+	TableData = TableData.trim();
+	TableData+='</textarea></div>';
+	body.innerHTML = TableData;
+}
 function Reload(URL){
-    t1=window.setTimeout(function(){ window.location.href=URL; },500);
+    t1=window.setTimeout(function(){ window.location.href=URL; },1000);
 }
 function ClearTime(){
 	localStorage.removeItem("TimeLog");
 	console.log('Clear DATA');
 
-	document.getElementById("table-data").innerHTML='<div class="alert alert-danger" role="alert">Close window/tab to avoid further logging!</div>';
+	$("table-data").innerHTML='<div class="alert alert-danger" role="alert">Close window/tab to avoid further logging!</div>';
 }
 function TimeLogger(){
-	var CurrentURL=window.location.href;
+	var CurrentURL=GetURL();
 	if(CurrentURL!=''){
 		//console.log(CurrentURL);
 
@@ -114,8 +235,8 @@ function TimeLogger(){
 				WriteLocalStorage(Data);
 			}
 			AddLog();
-
-			document.write('<div style="position:fixed;bottom: 0;right:0;"><a href="'+CurrentURL+'?openlog" target="_self" style="color:white;background-color:grey;padding:3px 6px;z-index:100;text-decoration:none;border-top-left-radius:3px;">Open Log</a>');
+			
+			document.write('<div style="position:fixed;bottom: 0;right:0;"><a href="'+CurrentURL+'?openlog" target="_self" style="color:white;background-color:grey;padding:3px 6px;z-index:100;text-decoration:none;border-top-left-radius:3px;">Open Log</a></div>');
 
 			document.body.addEventListener("click", function(){ AddLog() }, false);
 			document.body.addEventListener("keypress", function(){ AddLog() }, false);
@@ -128,5 +249,4 @@ function TimeLogger(){
 		console.log('No URL');
 	}
 }
-
 TimeLogger();
