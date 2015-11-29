@@ -19,6 +19,8 @@
 *	- SHIFT + TAB: save entry & go to previous<br>
 *	- ESC: cancel changes<br>
 *	Copy raw data.</p>
+<p>*	Copyright (C) 2015  Gorazd Krumpak<br>
+*	GNU GPLv3</p>
 <p>
 *	<a href="http://primaprodukcija.si/repo/time-logger/time-logger.js" target="_blank">DOWNLOAD uncompressed, development version</a><br>	
 *	<a href="http://primaprodukcija.si/repo/time-logger/tl.min.js" target="_blank">DOWNLOAD compressed, production version</a>
