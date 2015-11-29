@@ -5,13 +5,18 @@
 *
 *	Logging Time of activities, stored in LocalStorage
 *
-*	paste script before ent tag body:	<script src='http://timelogger.primaprodukcija.si/time-logger.js></script>
-*	use minified version:	<script src='http://timelogger.primaprodukcija.si/tl.min.js></script>
+*	paste compressed, production version script before end tag body:
+*	<!-- REMOVE BEFORE PUBLICATION -->
+*	<script src="http://primaprodukcija.si/repo/time-logger/time-logger.js"></script>
+*	use uncompressed, development version:
+*	<!-- REMOVE BEFORE PUBLICATION -->
+*	<script src="http://primaprodukcija.si/repo/time-logger/tl.min.js"></script>
+*	Remove before publish!
 *	Click right-bottom button 'Open Log' to access stored data.
 *	Logging on tag BODY load, click, keypress, focus, scroll
 *	Log interval is set to 1 minute
 *	You can add comments to log.
-*	Keyboard shortcuts: 
+*	Keyboard shortcuts:
 *	- ENTER: save entry
 *	- TAB: save entry & go to next
 *	- SHIFT + TAB: save entry & go to previous

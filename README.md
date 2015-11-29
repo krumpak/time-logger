@@ -2,12 +2,12 @@
 <p></p>
 <p>Logging Time of activities, stored in <i>LocalStorage</i></p>
 <p></p>
-<p>*	paste script before end tag body:<br>
+<p>*	paste compressed, production version script before end tag body:<br>
 *	&lt;!-- REMOVE BEFORE PUBLICATION --&gt;<br>
-*	&lt;script src="http://primaprodukcija.si/repo/time-logger/time-logger.js"&gt;&lt;/script&gt;<br>
-*	use minified version:<br>
+*	&lt;script src="http:&#47;&#47;primaprodukcija.si/repo/time-logger/time-logger.js"&gt;&lt;/script&gt;<br>
+*	use uncompressed, development version:<br>
 *	&lt;!-- REMOVE BEFORE PUBLICATION --&gt;<br>
-*	&lt;script src="http://primaprodukcija.si/repo/time-logger/tl.min.js"&gt;&lt;/script&gt;<br>
+*	&lt;script src="http:&#47;&#47;primaprodukcija.si/repo/time-logger/tl.min.js"&gt;&lt;/script&gt;<br>
 *	Remove before publish!
 *	Click right-bottom button 'Open Log' to access stored data.<br>
 *	Logging on tag BODY load, click, keypress, focus, scroll<br>
@@ -19,5 +19,9 @@
 *	- SHIFT + TAB: save entry & go to previous<br>
 *	- ESC: cancel changes<br>
 *	Copy raw data.</p>
+<p>
+*	<a href="http://primaprodukcija.si/repo/time-logger/time-logger.js" target="_blank">DOWNLOAD uncompressed, development version</a><br>	
+*	<a href="http://primaprodukcija.si/repo/time-logger/tl.min.js" target="_blank">DOWNLOAD compressed, production version</a>
+</p>
 
   <a href="http://primaprodukcija.si/repo/time-logger/" target="_blank">Live DEMO</a>
