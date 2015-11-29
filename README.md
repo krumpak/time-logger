@@ -2,8 +2,13 @@
 <p></p>
 <p>Logging Time of activities, stored in <i>LocalStorage</i></p>
 <p></p>
-<p>*	paste script before end tag body:	&lt;script src="http://primaprodukcija.si/repo/time-logger/time-logger.js"&gt;&lt;/script&gt;<br>
-*	use minified version:	&lt;script src="http://primaprodukcija.si/repo/time-logger/tl.min.js"&gt;&lt;/script&gt;<br>
+<p>*	paste script before end tag body:<br>
+*	&lt;!-- REMOVE BEFORE PUBLICATION --&gt;<br>
+*	&lt;script src="http://primaprodukcija.si/repo/time-logger/time-logger.js"&gt;&lt;/script&gt;<br>
+*	use minified version:<br>
+*	&lt;!-- REMOVE BEFORE PUBLICATION --&gt;<br>
+*	&lt;script src="http://primaprodukcija.si/repo/time-logger/tl.min.js"&gt;&lt;/script&gt;<br>
+*	Remove before publish!
 *	Click right-bottom button 'Open Log' to access stored data.<br>
 *	Logging on tag BODY load, click, keypress, focus, scroll<br>
 *	Log interval is set to 1 minute<br>
