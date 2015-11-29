@@ -215,7 +215,7 @@ function CopyRawData(){
 	var body = document.body;
 	var Storage=ReadLocalStorage();
 		console.clear();
-	var TableData ='<div style="width:50%;text-align:center;margin: 5px auto;"><div onclick="EchoTime();">Close</div><br><textarea onClick="this.select();" style="width:100%;height:500px;background-color:white;overflow:auto;border:1px solid #ccc;">';
+	var TableData ='<div style="width:50%;text-align:center;margin: 5px auto;"><button class="btn btn-default" type="submit" onclick="EchoTime();">Close</button><br><textarea onClick="this.select();" style="width:100%;height:500px;background-color:white;overflow:auto;border:1px solid #ccc;">';
 	if( Storage != null ){
 		for(var i=0; i < Storage.length; i++){
 			var Item = Storage[i];
