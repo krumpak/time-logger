@@ -41,7 +41,7 @@
 
 var CommentString = " ## ";
 
-function $(ID){
+function _$(ID){
 	return document.getElementById(ID);
 }
 function GetURL(){
@@ -153,13 +153,13 @@ function EchoTime(){
 	body.innerHTML=String+TableData;
 }
 function AddComment(ID){
-    $("static"+ID).style.display = 'none';
-    $("change"+ID).style.display = 'block';
-    $("input"+ID).focus();
-    $("input"+ID).select();
+    _$("static"+ID).style.display = 'none';
+    _$("change"+ID).style.display = 'block';
+    _$("input"+ID).focus();
+    _$("input"+ID).select();
 }
 function SaveComment(ID){
-    var value = $("input"+ID).value;
+    var value = _$("input"+ID).value;
     value = value.trim();
 
 	var Storage=ReadLocalStorage();
@@ -172,30 +172,30 @@ function SaveComment(ID){
 		var Injection = Separation[0]+CommentString+value;
 		Storage[ID] = Injection;
 		WriteLocalStorage(Storage);
-		$("static"+ID).innerHTML = value+" +";
+		_$("static"+ID).innerHTML = value+" +";
 	} else if ( ItemComment > 0 && value == '' ) {
 		var Separation = Item.split(CommentString);
 		var Injection = Separation[0];
 		Storage[ID] = Injection;
 		WriteLocalStorage(Storage);
-		$("static"+ID).innerHTML = "<div style='text-align:center'>+</div>";
+		_$("static"+ID).innerHTML = "<div style='text-align:center'>+</div>";
 	} else if ( ItemComment < 0 && value != '' ) {
 		var Injection = Item+CommentString+value;
 		Storage[ID] = Injection;
 		WriteLocalStorage(Storage);
-		$("static"+ID).innerHTML = value+" +";
+		_$("static"+ID).innerHTML = value+" +";
 	} else {
-		$("static"+ID).innerHTML = "<div style='text-align:center'>+</div>";
+		_$("static"+ID).innerHTML = "<div style='text-align:center'>+</div>";
 		//console.log("No commenting");	
 	}
 
-    $("static"+ID).style.display = 'block';
-    $("change"+ID).style.display = 'none';
+    _$("static"+ID).style.display = 'block';
+    _$("change"+ID).style.display = 'none';
 
 }
 function CancelComment(ID){
-    $("static"+ID).style.display = 'block';
-    $("change"+ID).style.display = 'none';
+    _$("static"+ID).style.display = 'block';
+    _$("change"+ID).style.display = 'none';
 }
 function EnterComment(event, ID){
 	var key=event.keyCode || event.which;
@@ -239,7 +239,7 @@ function ClearTime(){
 	localStorage.removeItem("TimeLog");
 	console.log('Clear DATA');
 
-	$("table-data").innerHTML='<div class="alert alert-danger" role="alert">Close window/tab to avoid further logging!</div>';
+	_$("table-data").innerHTML='<div class="alert alert-danger" role="alert">Close window/tab to avoid further logging!</div>';
 }
 function TimeLogger(){
 	var CurrentURL=GetURL();
