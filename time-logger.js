@@ -114,7 +114,8 @@ function EchoTime(){
 	String +=' .sticky {height:100%; position:fixed; width:120px; left:0; top:0; z-index:100; border-top:0;}';
 	String +=' button, span { color:black; font-size:15px; background-color:white; font-family:arial,sans-serif; position:absolute; width:90px; margin-left:20px; }';
 	String +=' #table-data { margin-left:120px; width: 620px; }';
-	String +=' input { width:320px;height:20px;font-size: 12px;margin:0;padding:0;border:0;background-color:black;color:yellow; }';
+	String +=' input { width:320px;height:20px;font-size: 12px;margin:0;padding:0;border:0;background-color:black;color:yellow;cursor:text; }';
+	String +=' span, .glyphicon, div, b, button { cursor:pointer; }';
 	String +=' </style>';
 
 	String +='<div class="sticky">';
