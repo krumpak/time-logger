@@ -26,4 +26,6 @@
 *	<a href="http://primaprodukcija.si/repo/time-logger/tl.min.js" target="_blank">DOWNLOAD compressed, production version</a>
 </p>
 
+<a href="http://www.primaprodukcija.si/repo/time-logger/" target="_self"><img style="width:300px;height:189px;" src="http://www.primaprodukcija.si/repo/time-logger/preview.jpg" alt="Time Logger" /></a>
+
   <a href="http://primaprodukcija.si/repo/time-logger/" target="_blank">Live DEMO</a>
